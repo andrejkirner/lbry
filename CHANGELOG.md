@@ -27,6 +27,7 @@ at anytime.
   * exception checking in several wallet unit tests
   * daemon not erring properly for non-numeric values being passed to the `bid` parameter for the `publish` method
   * incorrect `blob_num` for the stream terminator blob, which would result in creating invalid streams. Such invalid streams are detected on startup and are automatically removed (https://github.com/lbryio/lbry/issues/1124)
+  * handling error from dht clients with old `ping` method
 
 ### Deprecated
   * `channel_list_mine`, replaced with `channel_list`
@@ -50,6 +51,7 @@ at anytime.
   * `txid`, `nout`, `channel_claim_id`, and `channel_claim_name` filters for `file` commands (`file_list`, `file_set_status`, `file_reflect`,  and `file_delete`)
   * unit tests for `SQLiteStorage` and updated old tests for relevant changes (https://github.com/lbryio/lbry/issues/1088)
   *
+  * `single_hash_announce_duration` field to `status` response when provided the `dht_status` argument
 
 ### Changed
   * default download folder on linux from `~/Downloads` to `XDG_DOWNLOAD_DIR`
@@ -75,6 +77,10 @@ at anytime.
   * lbrynet database and file manager to separate the creation of lbry files (from downloading or publishing) from the handling of a stream. All files have a stream, but not all streams may have a file. (https://github.com/lbryio/lbry/issues/1020) 
   * manager classes to use new `SQLiteStorage` for database interaction. This class uses a single `lbrynet.sqlite` database file.
   *
+  * several internal dht functions to use inlineCallbacks
+  * blob announcement to be retried up to three times if `store` is unsuccessful
+  * `DHTHashAnnouncer` and `Node` manage functions to use `LoopingCall`s instead of scheduling with `callLater`.
+  * `store` kademlia rpc method to block on the call finishing and to return storing peer information
 
 ### Removed
   * `seccure` and `gmpy` dependencies
