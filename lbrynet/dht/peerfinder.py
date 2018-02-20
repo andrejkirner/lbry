@@ -2,7 +2,7 @@ import binascii
 import logging
 
 from zope.interface import implements
-from twisted.internet import defer, reactor
+from twisted.internet import defer
 from lbrynet.interfaces import IPeerFinder
 from lbrynet.core.utils import short_hash
 
@@ -38,27 +38,6 @@ class DHTPeerFinder(DummyPeerFinder):
         self.dht_node = dht_node
         self.peer_manager = peer_manager
         self.peers = []
-        self.next_manage_call = None
-
-    def run_manage_loop(self):
-        self._manage_peers()
-        self.next_manage_call = reactor.callLater(60, self.run_manage_loop)
-
-    def stop(self):
-        log.info("Stopping DHT peer finder.")
-        if self.next_manage_call is not None and self.next_manage_call.active():
-            self.next_manage_call.cancel()
-            self.next_manage_call = None
-
-    @defer.inlineCallbacks
-    def _manage_peers(self):
-        """
-        If we don't know any active peer, let's try to reconnect to the preconfigured
-        known DHT nodes
-        """
-        if not self.dht_node.hasContacts():
-            log.info("No active peer. Re-attempt joining DHT")
-            yield self.dht_node.join_dht()
 
     @defer.inlineCallbacks
     def find_peers_for_blob(self, blob_hash, timeout=None, filter_self=False):
@@ -81,7 +60,7 @@ class DHTPeerFinder(DummyPeerFinder):
         finished_deferred = self.dht_node.getPeersForBlob(bin_hash)
 
         if timeout is not None:
-            reactor.callLater(timeout, _trigger_timeout)
+            self.dht_node.reactor_callLater(timeout, _trigger_timeout)
 
         try:
             peer_list = yield finished_deferred
