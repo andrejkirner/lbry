@@ -28,6 +28,8 @@ at anytime.
   * daemon not erring properly for non-numeric values being passed to the `bid` parameter for the `publish` method
   * `publish` command to allow updating claims with a `bid` amount higher than the wallet balance, so long as the amount is less than the wallet balance plus the bid amount of the claim being updated (https://github.com/lbryio/lbry/issues/748)
   * incorrect `blob_num` for the stream terminator blob, which would result in creating invalid streams. Such invalid streams are detected on startup and are automatically removed (https://github.com/lbryio/lbry/issues/1124)
+  * fixed the inconsistencies in docstrings
+  *
 
 ### Deprecated
   * `channel_list_mine`, replaced with `channel_list`
@@ -50,7 +52,8 @@ at anytime.
   * `txid`, `nout`, `channel_claim_id`, `channel_claim_name`, `status`, `blobs_completed`, and `blobs_in_stream` fields to file objects returned by `file_list` and `get`
   * `txid`, `nout`, `channel_claim_id`, and `channel_claim_name` filters for `file` commands (`file_list`, `file_set_status`, `file_reflect`,  and `file_delete`)
   * unit tests for `SQLiteStorage` and updated old tests for relevant changes (https://github.com/lbryio/lbry/issues/1088)
-  *
+  * scripts to autogenerate documentation
+  * 
 
 ### Changed
   * default download folder on linux from `~/Downloads` to `XDG_DOWNLOAD_DIR`
@@ -88,7 +91,7 @@ at anytime.
   * unnecessary `TempBlobManager` class
   * old storage classes used by the file manager, wallet, and blob manager
   * old `.db` database files from the data directory
-  *
+  * short(single dashed) arguments
 
 ## [0.18.0] - 2017-11-08
 ### Fixed
